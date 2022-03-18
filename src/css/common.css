@@ -16,3 +16,11 @@ img {
   display: block;
   max-width: 100%;
 }
+
+.color-switcher_button{
+
+ display: inline-block;
+  width: 100px;
+  height: 50px;
+
+}

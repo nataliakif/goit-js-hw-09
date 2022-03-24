@@ -8,9 +8,10 @@ const refs ={
   refs.stopBtn.addEventListener('click', onclickStopButton);
   
    function onclickStartButton(event){
-     const changeColor = getRandomHexColor() ;
-     refs.body.style.backgroundColor = changeColor;
-  }
+     const changeColor = setTimeout(()=>{getRandomHexColor();
+     refs.body.style.backgroundColor = changeColor}, 1000) 
+  
+};
   function onclickStopButton(event){
     const changeColor = getRandomHexColor() ;
     refs.body.style.backgroundColor = changeColor;

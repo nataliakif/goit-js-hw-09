@@ -12,21 +12,34 @@ const refs ={
 } 
     refs.startBtn.disabled = true;
     let inputDate;
-    
+
+    const options = {
+        enableTime: true,
+        time_24hr: true,
+        defaultDate: new Date(),
+        minuteIncrement: 1,
+        onClose(selectedDates) {
+            timeCheaker(selectedDates[0]);
+        },
+      };
+    flatpickr(refs.dateTime, options);
+
     function timeCheaker(date){
         if(date <= Date.now()){
             window.alert('Please choose a date in the future');
+            refs.startBtn.disabled = true;
         }
-       
+        else{
         refs.startBtn.disabled = false;
         refs.dateTime.disabled =true;
         inputDate = date;
-
+        }
     }
 
 refs.startBtn.addEventListener('click', startTimer);
 
 function startTimer(){
+    refs.startBtn.disabled = true;
     setInterval(() => {
         const leftTime = convertMs(inputDate - Date.now());
         convertMs(leftTime); 
@@ -36,18 +49,15 @@ function startTimer(){
   
 }
 function changeTextContent({ days, hours, minutes, seconds }){
-    refs.timerDays.textContent = pad(days);
-    refs.timerHours.textContent = pad(hours);
-    refs.timerMinutes.textContent = pad(minutes);
-    refs.timerSeconds.textContent = pad(seconds);
+    refs.timerDays.textContent = addLeadingZero(days);
+    refs.timerHours.textContent = addLeadingZero(hours);
+    refs.timerMinutes.textContent = addLeadingZero(minutes);
+    refs.timerSeconds.textContent = addLeadingZero(seconds);
   }
   
-  function pad(value) {
+  function addLeadingZero(value) {
     return String(value).padStart(2, '0');
   }
- 
-
-flatpickr(refs.dateTime, options);
 
   function convertMs(ms) {
     // Number of milliseconds per unit of time

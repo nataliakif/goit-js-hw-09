@@ -1,6 +1,7 @@
 
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const refs ={
     dateTime: document.querySelector('input#datetime-picker'),
@@ -12,7 +13,7 @@ const refs ={
 } 
     refs.startBtn.disabled = true;
     let inputDate;
-
+    let timerId = null;
     const options = {
         enableTime: true,
         time_24hr: true,
@@ -26,8 +27,8 @@ const refs ={
 
     function timeCheaker(date){
         if(date <= Date.now()){
-            window.alert('Please choose a date in the future');
-            refs.startBtn.disabled = true;
+          Notify.failure('Please choose a date in the future');
+          refs.startBtn.disabled = true;
         }
         else{
         refs.startBtn.disabled = false;
@@ -40,12 +41,17 @@ refs.startBtn.addEventListener('click', startTimer);
 
 function startTimer(){
     refs.startBtn.disabled = true;
-    setInterval(() => {
-        const leftTime = convertMs(inputDate - Date.now());
-        convertMs(leftTime); 
-        changeTextContent(leftTime);
+    timerId = setInterval(() => {
+      const leftMs =inputDate - Date.now();
+      const leftTime = convertMs(leftMs);
+      changeTextContent(leftTime);
+      if(leftMs < 1000){
+          clearInterval(timerId);
+          return;
+      }
+        
       }, 1000);
-    
+     
   
 }
 function changeTextContent({ days, hours, minutes, seconds }){
